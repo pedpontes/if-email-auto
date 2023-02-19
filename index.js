@@ -34,14 +34,13 @@ function requestss(){
         const HTML = res.data
         const $ = cheerio.load(HTML)
 
-        let element = $('tr:eq(4)').children('td').text()
+        let element = $('tr').children('td').text()
 
-        element = element.trim().split(' ')
-        let text = (element[element.length -2] + element[element.length -1]).split('\n\n')
-        
-        text[1] === 'Embreve'
-            ? requestss() 
-            : send()
+        element = element.split('\n\n')
+        console.log(element)
+        // text[1] === 'Embreve'
+        //     ? requestss() 
+        //     : send()
     })
 }
 
