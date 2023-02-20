@@ -7,40 +7,32 @@ const URL = 'https://portal.ifsuldeminas.edu.br/index.php/cursos-superiores/aber
 const transporter = nodemailer.createTransport({
     host: smtp.host,
     port: smtp.port, 
-    // secure: false,
     auth: {
         user: smtp.user,
         pass: smtp.pass
     },
-    tls: {
-        rejectUnauthorized: false
-    }
 })
 const mailoptions = {
     from: smtp.user,
-    to: '', //alterar
-    subject: 'INSCRIÇÃO DO IF',
-    text: `\n\nOla Pedro Pontes\n\nSegue o link para acessar o cadastro:\n ${URL}`
+    to: '', //email de destino
+    subject: 'INSCRIÇÃO DO IF', //assunto do email
 }
-async function send(){
+async function send(element){
     await transporter.sendMail(mailoptions, (err, info) => {
         err 
             ? console.log(err) 
-            : console.log('Email enviado: ' + info.response)
+            : console.log('Email enviado')
 })}
 
 function requestss(){
     axios.get(URL).then( res => {
         const HTML = res.data
         const $ = cheerio.load(HTML)
+        let element = $('tr').text().split('\n\n\n').join('\n')
 
-        let element = $('tr').children('td').text()
-
-        element = element.split('\n\n')
-        console.log(element)
-        // text[1] === 'Embreve'
-        //     ? requestss() 
-        //     : send()
+        // console.log(element)
+        mailoptions.text = element
+        send()
     })
 }
 
